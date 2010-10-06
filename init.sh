@@ -32,8 +32,8 @@ data_archive='/sdcard/voodoo_user-data.tar'
 protect_image='/res/mmcblk0p2_protectionmode.img.bz2'
 
 alias mount_data_ext4="mount -t ext4 -o noatime,nodiratime /dev/block/mmcblk0p4 /data"
-alias mount_data_rfs="mount -t rfs -o nosuid,nodev,check=no /dev/block/mmcblk0p2 /data"
-alias mount_sdcard="mount -t vfat -o utf8 /dev/block/mmcblk0p1 /sdcard"
+alias mount_data_rfs="mount -t rfs -o nosuid,nodev,check=no /dev/block/mmcblk0p1 /data"
+alias mount_sdcard="mount -t vfat -o utf8 /dev/block/mmcblk1p1 /sdcard"
 alias mount_cache="mount -t rfs -o nosuid,nodev,check=no /dev/block/stl11 /cache"
 alias mount_dbdata="mount -t rfs -o nosuid,nodev,check=no /dev/block/stl10 /dbdata"
 
@@ -84,11 +84,11 @@ fast_wipe_ext4_and_build_rfs() {
 	# fast wipe :
 	# 5 first MB
 	bunzip2 -c $protect_image \
-		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p2
+		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
 	# 10MB around the 220MB limit
 	bunzip2 -c $protect_image \
 		| dd ibs=1024 obs=1024 skip=215k seek=215k count=10k \
-		of=/dev/block/mmcblk0p2
+		of=/dev/block/mmcblk0p1
 }
 
 check_free() {
@@ -202,6 +202,7 @@ mknod /dev/block/mmcblk0p2 b 179 2
 mknod /dev/block/mmcblk0p3 b 179 3
 mknod /dev/block/mmcblk0p4 b 179 4
 mknod /dev/block/mmcblk1 b 179 8
+mknod /dev/block/mmcblk1p1 b 179 9
 mknod /dev/block/stl1 b 138 1
 mknod /dev/block/stl2 b 138 2
 mknod /dev/block/stl3 b 138 3
@@ -390,10 +391,10 @@ if ! ext4_check ; then
 	umount /sdcard
 	umount /data
 	
-	# write the fake protection file on mmcblk0p2, just in case
+	# write the fake protection file on mmcblk0p1, just in case
 	log "write the fake protection file on mmcblk0p2, just in case" 
 	bunzip2 -c $protect_image \
-		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p2
+		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
 	
 	# set our partitions back 
 	set_partitions voodoo
