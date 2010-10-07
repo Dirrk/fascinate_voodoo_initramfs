@@ -29,7 +29,7 @@ set -x
 PATH=/bin:/sbin:/usr/bin/:/usr/sbin
 
 data_archive='/sdcard/voodoo_user-data.tar'
-protect_image='/res/mmcblk0p2_protectionmode.img.bz2'
+protect_image='/res/mmcblk0p1_protectionmode.img.bz2'
 
 alias mount_data_ext4="mount -t ext4 -o noatime,nodiratime /dev/block/mmcblk0p4 /data"
 alias mount_data_rfs="mount -t rfs -o nosuid,nodev,check=no /dev/block/mmcblk0p1 /data"
