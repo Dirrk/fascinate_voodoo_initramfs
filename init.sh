@@ -111,16 +111,16 @@ ext4_check() {
 	set_partitions voodoo
 	if dumpe2fs -h /dev/block/mmcblk0p4; then
 		log "ext4 partition detected"
-		set_partitions samsung
-		mount_data_rfs
-		if test -f /data/protection_file; then
-			log "protection file present"
-			umount /data
+		#set_partitions samsung
+		#mount_data_rfs
+		#if test -f /data/protection_file; then
+		#	log "protection file present"
+		#	umount /data
 			return 0
-		fi
-		say "data-wiped"
-		log "ext4 present but protection file absent"
-		return 1
+		#fi
+		#say "data-wiped"
+		#log "ext4 present but protection file absent"
+		#return 1
 	fi
 	log "no ext4 partition detected"
 	return 1
@@ -363,7 +363,7 @@ if ! ext4_check ; then
 	
 	# mount ressources we need
 	log "mount ressources to backup"
-	mount_data_rfs
+	#mount_data_rfs
 	mount_dbdata
 	mount_sdcard
 
