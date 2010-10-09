@@ -182,6 +182,11 @@ letsgo() {
 	exec /sbin/init
 }
 
+# create mount points
+mkdir cache config data dbdata dev efs \
+	mnt preinstall proc sdcard sqlite_stmt_journals \
+	sys tmp userdata
+
 # proc and sys are  used 
 mount -t proc proc /proc
 mount -t sysfs sys /sys
