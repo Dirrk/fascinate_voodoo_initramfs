@@ -83,12 +83,13 @@ fast_wipe_ext4_and_build_rfs() {
 	# re-write an almost empty rfs partition
 	# fast wipe :
 	# 5 first MB
-	bunzip2 -c $protect_image \
-		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
+	#bunzip2 -c $protect_image \
+	#	| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
 	# 10MB around the 220MB limit
-	bunzip2 -c $protect_image \
-		| dd ibs=1024 obs=1024 skip=215k seek=215k count=10k \
-		of=/dev/block/mmcblk0p1
+	#bunzip2 -c $protect_image \
+	#	| dd ibs=1024 obs=1024 skip=215k seek=215k count=10k \
+	#	of=/dev/block/mmcblk0p1
+	/sbin/fat.format.real "/dev/block/mmcblk0p1"
 }
 
 check_free() {
@@ -184,8 +185,8 @@ letsgo() {
 
 # create mount points
 mkdir cache config data dbdata dev efs \
-	mnt preinstall proc sdcard sqlite_stmt_journals \
-	sys tmp userdata
+	preinstall sdcard sqlite_stmt_journals \
+	userdata
 
 # proc and sys are  used 
 mount -t proc proc /proc
@@ -398,9 +399,13 @@ if ! ext4_check ; then
 	
 	# write the fake protection file on mmcblk0p1, just in case
 	log "write the fake protection file on mmcblk0p2, just in case" 
-	bunzip2 -c $protect_image \
-		| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
-	
+	#bunzip2 -c $protect_image \
+	#	| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
+	/sbin/fat.format.real "/dev/block/mmcblk0p1"
+	mount_data_rfs
+	dd if=/dev/zero bs=1024 of=/data/protection_file count=225280
+	umount /data
+
 	# set our partitions back 
 	set_partitions voodoo
 
