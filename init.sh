@@ -29,7 +29,6 @@ set -x
 PATH=/bin:/sbin:/usr/bin/:/usr/sbin
 
 data_archive='/sdcard/voodoo_user-data.tar'
-protect_image='/res/mmcblk0p1_protectionmode.img.bz2'
 
 alias mount_data_ext4="mount -t ext4 -o noatime,nodiratime /dev/block/mmcblk0p4 /data"
 alias mount_data_rfs="mount -t rfs -o nosuid,nodev,check=no /dev/block/mmcblk0p1 /data"
@@ -403,7 +402,7 @@ if ! ext4_check ; then
 	#	| dd ibs=1024 count=5k of=/dev/block/mmcblk0p1
 	/sbin/fat.format.real "/dev/block/mmcblk0p1"
 	mount_data_rfs
-	dd if=/dev/zero bs=1024 of=/data/protection_file count=225280
+	dd if=/dev/zero bs=1024 of=/data/protection_file seek=1624143 count=1
 	umount /data
 
 	# set our partitions back 
